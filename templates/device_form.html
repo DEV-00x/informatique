@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Modifier' if device.id else 'Ajouter' }} Appareil{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ 'Modifier' if device.id else 'Ajouter' }} un Appareil</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom de l'Appareil</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ device.name or '' }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type</label>
+                        <input type="text" class="form-control" id="type" name="type" value="{{ device.type or '' }}" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="serial_number" class="form-label">Numéro de Série</label>
+                        <input type="text" class="form-control" id="serial_number" name="serial_number" value="{{ device.serial_number or '' }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="actif" {% if device.status == 'actif' %}selected{% endif %}>Actif</option>
+                            <option value="en maintenance" {% if device.status == 'en maintenance' %}selected{% endif %}>En Maintenance</option>
+                            <option value="inactif" {% if device.status == 'inactif' %}selected{% endif %}>Inactif</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="assigned_to" class="form-label">Assigné à</label>
+                        <input type="text" class="form-control" id="assigned_to" name="assigned_to" value="{{ device.assigned_to or '' }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="service" class="form-label">Service</label>
+                        <input type="text" class="form-control" id="service" name="service" value="{{ device.service or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Département</label>
+                        <input type="text" class="form-control" id="department" name="department" value="{{ device.department or '' }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="mac_address" class="form-label">Adresse MAC</label>
+                        <input type="text" class="form-control" id="mac_address" name="mac_address" value="{{ device.mac_address or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="3">{{ device.notes or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ 'Modifier' if device.id else 'Ajouter' }}</button>
+            <a href="{{ url_for('devices') }}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

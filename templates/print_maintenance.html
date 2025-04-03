@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Imprimer Maintenance - {{ record.reference }}{% endblock %}
+
+{% block content %}
+<div class="container print-section">
+    <div class="text-end no-print">
+        <button class="btn btn-primary" onclick="window.print()">Imprimer</button>
+        <a href="{{ url_for('device_details', device_id=record.device_id) }}" class="btn btn-secondary">Retour</a>
+    </div>
+
+    <div class="text-center mb-4">
+        <h1>Fiche de Maintenance</h1>
+        <h3>{{ record.reference }}</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <tr><th>Appareil:</th><td>{{ record.device.name }}</td></tr>
+                <tr><th>Type:</th><td>{{ record.device.type }}</td></tr>
+                <tr><th>N° Série:</th><td>{{ record.device.serial_number }}</td></tr>
+                <tr><th>Service:</th><td>{{ record.device.service or '-' }}</td></tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table">
+                <tr><th>Date:</th><td>{{ record.maintenance_date.strftime('%d/%m/%Y') }}</td></tr>
+                <tr><th>Technicien:</th><td>{{ record.technician }}</td></tr>
+                <tr><th>Statut:</th><td>{{ record.status }}</td></tr>
+                <tr><th>Date d'achèvement:</th><td>{{ record.completion_date.strftime('%d/%m/%Y') if record.completion_date else '-' }}</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h4>Description du Problème</h4>
+        <p>{{ record.issue_description }}</p>
+    </div>
+
+    <div class="mb-4">
+        <h4>Actions Effectuées</h4>
+        <p>{{ record.actions_taken or '-' }}</p>
+    </div>
+
+    <div class="mb-4">
+        <h4>Notes</h4>
+        <p>{{ record.notes or '-' }}</p>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-6">
+            <div class="border-top pt-2">
+                <p class="text-center">Signature du Technicien</p>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="border-top pt-2">
+                <p class="text-center">Signature du Responsable</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

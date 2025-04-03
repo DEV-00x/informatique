@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Tableau de bord</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card stats-card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Appareils</h5>
+                <p class="card-text display-4">{{ total_devices }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Appareils Actifs</h5>
+                <p class="card-text display-4">{{ active_devices }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">En Maintenance</h5>
+                <p class="card-text display-4">{{ maintenance_devices }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card bg-danger text-white">
+            <div class="card-body">
+                <h5 class="card-title">Inactifs</h5>
+                <p class="card-text display-4">{{ inactive_devices }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Derniers Appareils Ajoutés</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for device in recent_devices %}
+                    <a href="{{ url_for('device_details', device_id=device.id) }}" class="list-group-item list-group-item-action">
+                        {{ device.name }} - {{ device.type }}
+                        <span class="badge bg-{{ 'success' if device.status == 'actif' else 'warning' if device.status == 'en maintenance' else 'danger' }} float-end">
+                            {{ device.status }}
+                        </span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Dernières Maintenances</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for record in recent_maintenance %}
+                    <a href="{{ url_for('device_details', device_id=record.device_id) }}" class="list-group-item list-group-item-action">
+                        {{ record.device.name }} - {{ record.maintenance_date.strftime('%d/%m/%Y') }}
+                        <span class="badge bg-{{ 'success' if record.status == 'terminé' else 'warning' if record.status == 'en cours' else 'secondary' }} float-end">
+                            {{ record.status }}
+                        </span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

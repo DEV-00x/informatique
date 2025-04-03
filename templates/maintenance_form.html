@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Modifier' if record else 'Ajouter' }} Maintenance{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ 'Modifier' if record else 'Ajouter' }} une Maintenance</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label for="device_id" class="form-label">Appareil</label>
+                <select name="device_id" id="device_id" class="form-select" required {% if device_id %}disabled{% endif %}>
+                    {% for device in devices %}
+                    <option value="{{ device.id }}" {% if device_id == device.id or (record and record.device_id == device.id) %}selected{% endif %}>
+                        {{ device.name }} ({{ device.serial_number }})
+                    </option>
+                    {% endfor %}
+                </select>
+                {% if device_id %}
+                <input type="hidden" name="device_id" value="{{ device_id }}">
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="maintenance_date" class="form-label">Date de Maintenance</label>
+                        <input type="date" class="form-control" id="maintenance_date" name="maintenance_date" 
+                               value="{{ record.maintenance_date.strftime('%Y-%m-%d') if record and record.maintenance_date else today }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="technician" class="form-label">Technicien</label>
+                        <input type="text" class="form-control" id="technician" name="technician" list="technicians"
+                               value="{{ record.technician if record else '' }}" required>
+                        <datalist id="technicians">
+                            {% for tech in technicians %}
+                            <option value="{{ tech }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="issue_description" class="form-label">Description du Problème</label>
+                <textarea class="form-control" id="issue_description" name="issue_description" rows="3" required>{{ record.issue_description if record else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="actions_taken" class="form-label">Actions Effectuées</label>
+                <textarea class="form-control" id="actions_taken" name="actions_taken" rows="3">{{ record.actions_taken if record else '' }}</textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="en attente" {% if record and record.status == 'en attente' %}selected{% endif %}>En attente</option>
+                            <option value="en cours" {% if record and record.status == 'en cours' %}selected{% endif %}>En cours</option>
+                            <option value="terminé" {% if record and record.status == 'terminé' %}selected{% endif %}>Terminé</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="completion_date" class="form-label">Date d'Achèvement</label>
+                        <input type="date" class="form-control" id="completion_date" name="completion_date"
+                               value="{{ record.completion_date.strftime('%Y-%m-%d') if record and record.completion_date else '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="2">{{ record.notes if record else '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ 'Modifier' if record else 'Ajouter' }}</button>
+            <a href="{{ url_for('device_details', device_id=device_id if device_id else (record.device_id if record else 1)) }}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Historique des Propriétaires - {{ device.name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Historique des Propriétaires - {{ device.name }}</h1>
+    <div>
+        <a href="{{ url_for('export_ownership_history', device_id=device.id) }}" class="btn btn-success">Exporter Excel</a>
+        <a href="{{ url_for('device_details', device_id=device.id) }}" class="btn btn-secondary">Retour</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Ancien Propriétaire</th>
+                        <th>Nouveau Propriétaire</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for change in ownership_changes %}
+                    <tr>
+                        <td>{{ change.change_date.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td>{{ change.previous_owner }}</td>
+                        <td>{{ change.new_owner }}</td>
+                        <td>{{ change.notes or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
